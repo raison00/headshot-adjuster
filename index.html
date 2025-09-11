@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Headshot Generator</title>
+    <link rel="stylesheet" href="index.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@1.0.0"
+        }
+      }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Professional Headshot Generator</h1>
+        <p>Upload a photo, choose your background, hair, clothing, face shape, and expression, and our AI will transform it into a polished, professional headshot.</p>
+    </header>
+    <main class="container">
+        <div class="panel input-panel">
+            <h2>1. Your Photo</h2>
+            <div id="upload-area">
+                <label for="image-upload" class="upload-label">
+                    <span>Click to select an image</span>
+                </label>
+                <input type="file" id="image-upload" accept="image/png, image/jpeg" hidden>
+            </div>
+            <div id="original-image-preview" class="image-preview" aria-live="polite"></div>
+
+            <div id="background-style-selector-container" style="display: none;">
+                <h2>2. Choose a Background</h2>
+                <div class="style-selector">
+                    <label>
+                        <input type="radio" name="background-style" value="modern office" checked>
+                        <div class="style-preview preview-office"></div>
+                        <span>Office</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="background-style" value="professional studio with a neutral backdrop">
+                        <div class="style-preview preview-studio"></div>
+                        <span>Studio</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="background-style" value="subtle outdoor bokeh">
+                        <div class="style-preview preview-outdoor"></div>
+                        <span>Outdoor</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div id="hair-style-selector-container" style="display: none;">
+                <h2>3. Choose a Hair Style</h2>
+                <div class="style-selector">
+                     <label>
+                        <input type="radio" name="hair-style" value="none" checked>
+                        <div class="style-preview preview-none"></div>
+                        <span>None</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="hair-style" value="lighten the hair color slightly">
+                        <div class="style-preview preview-lighten"></div>
+                        <span>Lighten</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="hair-style" value="darken the hair color slightly">
+                        <div class="style-preview preview-darken"></div>
+                        <span>Darken</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="hair-style" value="add subtle auburn highlights to the hair">
+                        <div class="style-preview preview-auburn"></div>
+                        <span>Auburn</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div id="clothing-style-selector-container" style="display: none;">
+                <h2>4. Choose Clothing</h2>
+                <div class="style-selector">
+                     <label>
+                        <input type="radio" name="clothing-style" value="professional blouse" checked>
+                        <div class="style-preview preview-blouse"></div>
+                        <span>Blouse</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="clothing-style" value="corporate suit">
+                        <div class="style-preview preview-suit"></div>
+                        <span>Suit</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="clothing-style" value="professional hoodie">
+                        <div class="style-preview preview-hoodie"></div>
+                        <span>Hoodie</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="clothing-style" value="professional collared shirt">
+                        <div class="style-preview preview-collared-shirt"></div>
+                        <span>Collared Shirt</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="clothing-style" value="professional flannel shirt">
+                        <div class="style-preview preview-flannel-shirt"></div>
+                        <span>Flannel</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="clothing-style" value="professional lace dress">
+                        <div class="style-preview preview-lace-dress"></div>
+                        <span>Lace Dress</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="face-shape-selector-container" style="display: none;">
+                <h2>5. Choose a Face Shape</h2>
+                <div class="style-selector">
+                     <label>
+                        <input type="radio" name="face-shape" value="none" checked>
+                        <div class="style-preview preview-none"></div>
+                        <span>None</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="face-shape" value="subtly give the face a rounder shape">
+                        <div class="style-preview preview-face-round"></div>
+                        <span>Round</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="face-shape" value="subtly give the face a more heart-like shape">
+                        <div class="style-preview preview-face-heart"></div>
+                        <span>Heart</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="face-shape" value="subtly give the face a more oval shape">
+                        <div class="style-preview preview-face-oval"></div>
+                        <span>Oval</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="expression-selector-container" style="display: none;">
+                <h2>6. Choose an Expression</h2>
+                <div class="style-selector">
+                     <label>
+                        <input type="radio" name="expression" value="none" checked>
+                        <div class="style-preview preview-none"></div>
+                        <span>None</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="expression" value="adjust the expression to a gentle, closed-mouth smile">
+                        <div class="style-preview preview-closed-smile"></div>
+                        <span>Closed Smile</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="expression" value="adjust the expression to show subtle amusement">
+                        <div class="style-preview preview-amusement"></div>
+                        <span>Amusement</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="expression" value="adjust the expression to show a look of positive anticipation">
+                        <div class="style-preview preview-anticipation"></div>
+                        <span>Anticipation</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="expression" value="adjust the expression to be neutral and professional">
+                        <div class="style-preview preview-neutral"></div>
+                        <span>Neutral</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="generate-btn" disabled>Generate Headshot</button>
+                <button id="clear-btn" class="button-secondary" style="display: none;">New Photo</button>
+            </div>
+        </div>
+        <div class="panel output-panel">
+            <h2>Your Professional Headshot</h2>
+            <div id="generated-image-container" class="image-preview" aria-live="polite">
+                <p class="placeholder-text">Your generated image will appear here.</p>
+            </div>
+            <a id="download-btn" class="button" href="#" download="professional-headshot.png" style="display: none;">Download Image</a>
+        </div>
+    </main>
+    <script type="module" src="index.tsx"></script>
+</body>
+</html>
